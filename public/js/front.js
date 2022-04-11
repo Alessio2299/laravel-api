@@ -1935,25 +1935,36 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Main',
   data: function data() {
     return {
-      posts: null
+      posts: null,
+      currentPage: 1,
+      totalPage: ''
     };
   },
   methods: {
-    getPost: function getPost() {
+    getPost: function getPost(pageApi) {
       var _this = this;
 
-      axios.get('/api/posts').then(function (response) {
-        _this.posts = response.data.response;
+      axios.get('/api/posts', {
+        'params': {
+          'page': pageApi
+        }
+      }).then(function (response) {
+        _this.posts = response.data.response.data;
+        _this.totalPage = response.data.response.last_page;
         console.log(response.data.response);
       });
     }
   },
   created: function created() {
-    this.getPost();
+    this.getPost(this.currentPage);
   }
 });
 
@@ -3166,6 +3177,36 @@ var render = function () {
         }),
         0
       ),
+      _vm._v(" "),
+      _c("div", { staticClass: "text-center" }, [
+        _c(
+          "span",
+          {
+            staticClass: "mx-3 btn btn-primary btn-lg",
+            class: _vm.currentPage <= 1 ? "d-none" : "",
+            on: {
+              click: function ($event) {
+                _vm.currentPage--, _vm.getPost(_vm.currentPage)
+              },
+            },
+          },
+          [_vm._v("Prev")]
+        ),
+        _vm._v(" "),
+        _c(
+          "span",
+          {
+            staticClass: "mx-2 btn btn-primary btn-lg",
+            class: _vm.currentPage == _vm.totalPage ? "d-none" : "",
+            on: {
+              click: function ($event) {
+                _vm.currentPage++, _vm.getPost(_vm.currentPage)
+              },
+            },
+          },
+          [_vm._v("Next")]
+        ),
+      ]),
     ]),
   ])
 }

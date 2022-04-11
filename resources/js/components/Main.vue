@@ -21,6 +21,10 @@
           </div>
         </div>
       </div>
+      <div class="text-center">
+        <span @click="currentPage--, getPost(currentPage)" class="mx-3 btn btn-primary btn-lg" :class="currentPage <= 1 ? 'd-none' : ''">Prev</span>
+        <span @click="currentPage++, getPost(currentPage)" class="mx-2 btn btn-primary btn-lg" :class="currentPage == totalPage ? 'd-none' : ''">Next</span>
+      </div>
     </div>
   </div>
 </template>
@@ -30,19 +34,26 @@
     name : 'Main',
     data(){
       return{
-        posts : null
+        posts : null,
+        currentPage: 1,
+        totalPage: '',
       }
     },
     methods:{
-      getPost(){
-        axios.get('/api/posts').then(response =>{
-          this.posts = response.data.response;
-          console.log(response.data.response)
+      getPost(pageApi){
+        axios.get('/api/posts', {
+          'params' : {
+            'page' : pageApi
+          }
+        }).then(response =>{
+          this.posts = response.data.response.data;
+          this.totalPage = response.data.response.last_page;
+          console.log(response.data.response) 
         })
       }
     },
     created(){
-      this.getPost();
+      this.getPost(this.currentPage);
     }
   }
 </script>
