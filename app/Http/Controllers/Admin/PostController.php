@@ -6,6 +6,7 @@ use App\Category;
 use App\Http\Controllers\Controller;
 use App\Post;
 use App\Tag;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Arr;
@@ -21,7 +22,6 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::all();
-        
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -61,6 +61,9 @@ class PostController extends Controller
             $slug = Str::slug($data['title']) . '-' . $counter;
             $counter++;
         }
+
+        
+
         $data['slug'] = $slug;
         $post->fill($data);
         $post->save();
@@ -78,7 +81,10 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        return view('admin.posts.show', compact('post'));
+        $now = Carbon::now();
+        $datePost = Carbon::create($post['created_at']);
+        $diffInDate = $datePost->diffInDays($now);
+        return view('admin.posts.show', compact('post', 'diffInDate'));
     }
 
     /**

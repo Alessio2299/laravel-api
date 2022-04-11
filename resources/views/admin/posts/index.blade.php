@@ -33,7 +33,7 @@
                             @foreach ($post->tags as $tag)
                                 <a href="{{route('admin.tags.show', $tag->id)}}"><span class="badge badge-primary">{{$tag->name}}</span></a> 
                             @endforeach     
-                        </td>                      
+                        </td>     
                         <td class="d-flex">
                             <a class="mr-2 btn btn-secondary" href="{{route('admin.posts.edit', $post->id)}}">Edit</a>
                             <a class="mr-2 btn btn-primary" href="{{route('admin.posts.show', $post->id)}}">Show</a>
